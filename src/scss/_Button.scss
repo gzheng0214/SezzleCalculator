@@ -1,0 +1,16 @@
+button {
+  border-radius: 10px;
+  background-color: rgb(236, 237, 239);
+  border: 1px solid black;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  transition: background-color 0.5s;
+  font-weight: 700;
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.8rem;
+
+  &:active {
+    background-color: grey;
+  }
+}

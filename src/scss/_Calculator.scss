@@ -1,0 +1,20 @@
+.calculator {
+  height: 60rem;
+  width: 50rem;
+  border: 2px solid black;
+  margin-top: 15rem;
+
+  @media screen and (max-width: 37.5em) {
+    width: 100vw;
+    margin-top: 0;
+  }
+
+  &__container {
+    height: 45rem;
+    padding: 2rem;
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 1rem;
+  }
+}
