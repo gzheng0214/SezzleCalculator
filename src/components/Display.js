@@ -1,10 +1,10 @@
 import React from "react";
 
-const Display = () => {
+const Display = (props) => {
   return (
     <div className="display">
-      <div className="display__expression">123</div>
-      <div className="display__result">456</div>
+      <div className="display__expression">{props.expression}</div>
+      <div className="display__result">{props.result}</div>
     </div>
   );
 };
