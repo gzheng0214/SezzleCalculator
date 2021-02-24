@@ -3,9 +3,10 @@
   width: 50rem;
   border: 2px solid black;
   margin-top: 15rem;
+  background-color: rgb(255, 216, 164);
 
-  @media screen and (max-width: 37.5em) {
-    width: 100vw;
+  @media screen and (max-width: 43.75em) {
+    width: 100%;
     margin-top: 0;
   }
 
@@ -16,5 +17,16 @@
     grid-template-rows: repeat(5, 1fr);
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 1rem;
+  }
+}
+
+.clearBtn {
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 3rem;
+
+  @media screen and (max-width: 43.75em) {
+    width: 100%;
+    margin: 0;
   }
 }
