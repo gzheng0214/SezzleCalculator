@@ -4,7 +4,9 @@ import Button from "./Button";
 import Display from "./Display";
 import Results from "./Results";
 
-const socket = io.connect("/");
+const socketURL =
+  process.env.NODE_ENV === "production" ? "/" : "http://localhost:4000";
+const socket = io.connect(socketURL);
 
 const App = () => {
   const [expression, setExpression] = useState("");
@@ -13,7 +15,7 @@ const App = () => {
 
   // GET DATA FROM LOCAL STORAGE ON LOAD
   useEffect(() => {
-    if (localStorage.getItem("results") !== null) {
+    if (localStorage.getItem("results")) {
       const localData = JSON.parse(localStorage.getItem("results"));
       setResults(localData);
     }
@@ -44,8 +46,8 @@ const App = () => {
         answer = String(eval(expression));
         setResult(answer);
       } catch (e) {
-        answer = "error";
-        setResult("Error");
+        answer = "Error";
+        setResult(answer);
       }
       // SENDING DATA TO SOCKETIO
       socket.emit("result", { expression, answer });
@@ -74,30 +76,25 @@ const App = () => {
         const lastChar = expression[expression.length - 1];
         const numbers = expression.split(/\+|-|\*|\//);
         const lastNumber = numbers[numbers.length - 1];
+        const operations = ["*", "+", "/", "-"];
+        // CHECK STRUCTURE OF EXPRESSION
         if (expression.length > 0) {
           // CHECK FOR DUPLICATE OPERATIONS
           if (
-            ["*", "+", "/", "-"].indexOf(lastChar) >= 0 &&
-            ["*", "+", "/", "-"].indexOf(button) >= 0
+            operations.indexOf(lastChar) >= 0 &&
+            operations.indexOf(button) >= 0
           ) {
-            if (expression.length > 1) {
-              setExpression(expression.slice(0, -1) + button);
-            } else if (lastChar !== "-") {
+            if (expression.length > 1 || lastChar !== "-") {
               setExpression(expression.slice(0, -1) + button);
             }
-          } else if (button === "0") {
+          } else if (button === "0" && lastNumber !== "0") {
             // CHECK FOR DUPLICATE ZEROES BEFORE DECIMAL
-            if (lastNumber !== "0") {
-              setExpression(expression + button);
-            } else {
-              setExpression(expression.slice(0, -1) + button);
-            }
+            setExpression(expression + button);
           } // CHECK FOR DUPLICATE DECIMAL
-          else if (!(button === "." && lastNumber.includes("."))) {
-            // CHECK STRUCTURE OF EXPRESSION
+          else if (button !== "." || !lastNumber.includes(".")) {
             if (
               lastNumber === "0" &&
-              ["*", "+", "/", "-"].indexOf(button) < 0 &&
+              operations.indexOf(button) < 0 &&
               button !== "."
             ) {
               setExpression(expression.slice(0, -1) + button);
@@ -105,10 +102,8 @@ const App = () => {
               setExpression(expression + button);
             }
           }
-        } else {
-          if (!isNaN(button) || button === "." || button === "-") {
-            setExpression(expression + button);
-          }
+        } else if (!isNaN(button) || button === "." || button === "-") {
+          setExpression(expression + button);
         }
         setResult("");
     }
